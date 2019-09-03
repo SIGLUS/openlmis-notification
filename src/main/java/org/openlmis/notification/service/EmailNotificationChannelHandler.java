@@ -21,6 +21,8 @@ import static org.openlmis.notification.service.NotificationToSendRetriever.IMPO
 import static org.openlmis.notification.service.NotificationToSendRetriever.RECIPIENT_HEADER;
 
 import java.util.UUID;
+import org.apache.commons.lang3.StringUtils;
+
 import org.openlmis.notification.domain.NotificationMessage;
 import org.openlmis.notification.domain.UserContactDetails;
 import org.openlmis.notification.repository.UserContactDetailsRepository;
@@ -35,6 +37,7 @@ import org.springframework.messaging.handler.annotation.Header;
 public class EmailNotificationChannelHandler {
   private static final Logger LOGGER = LoggerFactory
       .getLogger(EmailNotificationChannelHandler.class);
+  private static final String SIMAM = "simam";
 
   @Autowired
   private UserContactDetailsRepository userContactDetailsRepository;
@@ -51,9 +54,11 @@ public class EmailNotificationChannelHandler {
       @Header(value = IMPORTANT_HEADER, required = false) Boolean important) {
     UserContactDetails contactDetails = userContactDetailsRepository.findOne(recipient);
 
+    String tag = payload.getTag();
+    Boolean isHtml = !StringUtils.isEmpty(tag) && tag.equals(SIMAM) ? true : false;
     if (shouldSendMessage(contactDetails, important)) {
       emailSender.sendMail(contactDetails.getEmailAddress(),
-          payload.getSubject(), payload.getBody());
+          payload.getSubject(), payload.getBody(), isHtml);
     }
   }
 

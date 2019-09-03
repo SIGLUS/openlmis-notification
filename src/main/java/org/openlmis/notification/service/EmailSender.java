@@ -38,8 +38,8 @@ class EmailSender {
   @Value("${email.noreply}")
   private String from;
 
-  void sendMail(String to, String subject, String body) {
-    XLOGGER.entry(to, subject, body);
+  void sendMail(String to, String subject, String body, Boolean isHtml) {
+    XLOGGER.entry(to, subject, body, isHtml);
     Profiler profiler = new Profiler("SEND_MAIL");
     profiler.setLogger(XLOGGER);
 
@@ -52,7 +52,7 @@ class EmailSender {
       helper.setFrom(from);
       helper.setTo(to);
       helper.setSubject(subject);
-      helper.setText(body);
+      helper.setText(body, isHtml);
 
       profiler.start("SEND_MESSAGE");
       mailSender.send(mailMessage);
@@ -69,4 +69,8 @@ class EmailSender {
     }
   }
 
+  void sendMail(String to, String subject, String body) {
+    Boolean isHtml = false;
+    sendMail(to, subject, body, isHtml);
+  }
 }
