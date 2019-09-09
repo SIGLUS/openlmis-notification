@@ -18,15 +18,24 @@ package org.openlmis.notification.web.notification;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
+import org.openlmis.notification.domain.NotificationMessage;
+import org.openlmis.notification.service.NotificationChannel;
 import org.openlmis.notification.testutils.ToStringTestUtils;
 
 public class MessageDtoTest {
 
   @Test
   public void equalsContract() {
+    MessageDto messageDto = new MessageDto();
+    messageDto.setSubject("test");
+    messageDto.setBody("test");
+    messageDto.setTag("test");
     EqualsVerifier
         .forClass(MessageDto.class)
         .suppress(Warning.NONFINAL_FIELDS)
+        .withPrefabValues(NotificationMessage.class,
+            new NotificationMessage(NotificationChannel.EMAIL, "email test"),
+            new NotificationMessage(NotificationChannel.SMS, "sms test"))
         .verify();
   }
 

@@ -13,29 +13,51 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org.
  */
 
-package org.openlmis.notification.web.notification;
+package org.openlmis.notification.domain;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import java.util.List;
+import java.time.ZonedDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-import org.openlmis.notification.domain.EmailAttachment;
+import org.hibernate.annotations.Type;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Entity
+@Table(name = "email_attachment")
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
-@JsonInclude(Include.NON_NULL)
-public final class MessageDto {
-  private String subject;
-  private String body;
-  private String tag;
-  private List<EmailAttachment> emailAttachments;
+@NoArgsConstructor
+public class EmailAttachment extends BaseEntity {
+  @ManyToOne
+  @Type(type = UUID_TYPE)
+  @JoinColumn(name = "notificationMessageId", nullable = false)
+  @Getter
+  @Setter
+  private NotificationMessage notificationMessage;
+
+  @Column(nullable = false)
+  @Getter
+  private String s3Bucket;
+
+  @Column(nullable = false)
+  @Getter
+  private String s3Folder;
+
+  @Column(nullable = false)
+  @Getter
+  private String attachmentFileName;
+
+  @Column(nullable = false)
+  @Getter
+  private String attachmentFileType;
+
+  @Column(columnDefinition = "timestamp with time zone", nullable = false)
+  @Getter
+  private ZonedDateTime createdDate;
 }

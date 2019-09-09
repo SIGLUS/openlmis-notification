@@ -17,6 +17,7 @@ package org.openlmis.notification.domain;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
+import org.openlmis.notification.service.NotificationChannel;
 import org.openlmis.notification.util.NotificationDataBuilder;
 
 public class NotificationMessageTest {
@@ -28,6 +29,9 @@ public class NotificationMessageTest {
         .withPrefabValues(Notification.class,
             new NotificationDataBuilder().buildAsNew(),
             new NotificationDataBuilder().buildAsNew())
+        .withPrefabValues(NotificationMessage.class,
+            new NotificationMessage(NotificationChannel.EMAIL, "body1", "subject1"),
+            new NotificationMessage(NotificationChannel.EMAIL, "body2", "subject2"))
         .withRedefinedSuperclass()
         .withIgnoredFields("notification")
         .verify();

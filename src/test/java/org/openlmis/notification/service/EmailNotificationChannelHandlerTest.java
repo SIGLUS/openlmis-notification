@@ -70,7 +70,8 @@ public class EmailNotificationChannelHandlerTest {
 
     // then
     verify(emailSender)
-        .sendMail(contactDetails.getEmailAddress(), message.getSubject(), message.getBody(), false);
+        .sendMail(contactDetails.getEmailAddress(), message.getSubject(), message.getBody(),
+            false, null);
   }
 
   @Test
@@ -82,7 +83,8 @@ public class EmailNotificationChannelHandlerTest {
 
     // then
     verify(emailSender)
-        .sendMail(contactDetails.getEmailAddress(), message.getSubject(), message.getBody(), true);
+        .sendMail(contactDetails.getEmailAddress(), message.getSubject(), message.getBody(),
+            true, null);
   }
 
   @Test
@@ -119,7 +121,8 @@ public class EmailNotificationChannelHandlerTest {
 
     // then
     verify(emailSender)
-        .sendMail(contactDetails.getEmailAddress(), message.getSubject(), message.getBody(), false);
+        .sendMail(contactDetails.getEmailAddress(), message.getSubject(), message.getBody(),
+            false, null);
   }
 
 }

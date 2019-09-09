@@ -15,9 +15,16 @@
 
 package org.openlmis.notification.service;
 
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.openlmis.notification.i18n.MessageKeys.ERROR_SEND_MAIL_FAILURE;
 
+import java.util.List;
+import javax.activation.DataSource;
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+
+import org.openlmis.notification.domain.EmailAttachment;
+import org.openlmis.notification.service.simam.EmailAttachmentService;
 import org.slf4j.ext.XLogger;
 import org.slf4j.ext.XLoggerFactory;
 import org.slf4j.profiler.Profiler;
@@ -35,10 +42,18 @@ class EmailSender {
   @Autowired
   private JavaMailSender mailSender;
 
+  @Autowired
+  private EmailAttachmentService emailAttachmentService;
+
   @Value("${email.noreply}")
   private String from;
 
-  void sendMail(String to, String subject, String body, Boolean isHtml) {
+  static {
+    System.setProperty("mail.mime.splitlongparameters", "false");
+  }
+
+  void sendMail(String to, String subject, String body, Boolean isHtml,
+            List<EmailAttachment> emailAttachments) {
     XLOGGER.entry(to, subject, body, isHtml);
     Profiler profiler = new Profiler("SEND_MAIL");
     profiler.setLogger(XLOGGER);
@@ -48,11 +63,23 @@ class EmailSender {
       MimeMessage mailMessage = mailSender.createMimeMessage();
 
       profiler.start("CREATE_MESSAGE_HELPER");
-      MimeMessageHelper helper = new MimeMessageHelper(mailMessage, false);
+      Boolean multipart = isEmpty(emailAttachments) ? false : true;
+      MimeMessageHelper helper = new MimeMessageHelper(mailMessage, multipart);
       helper.setFrom(from);
       helper.setTo(to);
       helper.setSubject(subject);
       helper.setText(body, isHtml);
+
+      if (!isEmpty(emailAttachments)) {
+        emailAttachments.forEach(attachment -> {
+          DataSource dataSource = emailAttachmentService.getAttatchmentDataSource(attachment);
+          try {
+            helper.addAttachment(attachment.getAttachmentFileName(), dataSource);
+          } catch (MessagingException e) {
+            XLOGGER.error(e.getMessage());
+          }
+        });
+      }
 
       profiler.start("SEND_MESSAGE");
       mailSender.send(mailMessage);
@@ -71,6 +98,6 @@ class EmailSender {
 
   void sendMail(String to, String subject, String body) {
     Boolean isHtml = false;
-    sendMail(to, subject, body, isHtml);
+    sendMail(to, subject, body, isHtml, null);
   }
 }

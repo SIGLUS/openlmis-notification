@@ -57,6 +57,7 @@ dependencies {
     compile 'org.openlmis:openlmis-service-util:3.0.0'
     compile 'org.openlmis:openlmis-service-util:3.0.0'
     compile 'org.webjars.npm:api-console:3.0.17'
+    compile 'com.amazonaws:aws-java-sdk-s3:1.11.627'
 
     testCompile "be.joengenduvel.java.verifiers:to-string:1.0.2"
     testCompile "com.github.tomakehurst:wiremock:1.58"

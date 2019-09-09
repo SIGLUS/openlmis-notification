@@ -58,7 +58,7 @@ public class EmailNotificationChannelHandler {
     Boolean isHtml = !StringUtils.isEmpty(tag) && tag.equals(SIMAM) ? true : false;
     if (shouldSendMessage(contactDetails, important)) {
       emailSender.sendMail(contactDetails.getEmailAddress(),
-          payload.getSubject(), payload.getBody(), isHtml);
+          payload.getSubject(), payload.getBody(), isHtml, payload.getEmailAttachments());
     }
   }
 

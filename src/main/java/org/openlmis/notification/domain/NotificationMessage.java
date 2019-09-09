@@ -15,12 +15,18 @@
 
 package org.openlmis.notification.domain;
 
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -60,6 +66,12 @@ public class NotificationMessage extends BaseEntity {
   @Getter
   private String tag;
 
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "notificationMessage", orphanRemoval = true,
+          fetch = FetchType.EAGER)
+  @Getter
+  @Setter
+  private List<EmailAttachment> emailAttachments;
+
   /**
    * Default constructor.
    *
@@ -83,6 +95,15 @@ public class NotificationMessage extends BaseEntity {
 
   public NotificationMessage(NotificationChannel channel, String body,
       String subject, String tag) {
-    this(null, channel, body, subject, tag);
+    this(null, channel, body, subject, tag, null);
+  }
+
+  public NotificationMessage(NotificationChannel channel, String body,
+      String subject, String tag, List<EmailAttachment> emailAttachments) {
+    this(null, channel, body, subject, tag, emailAttachments);
+    if (!isEmpty(emailAttachments)) {
+      this.emailAttachments.forEach(emailAttachment ->
+          emailAttachment.setNotificationMessage(this));
+    }
   }
 }
