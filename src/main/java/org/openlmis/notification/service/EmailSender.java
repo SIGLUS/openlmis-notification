@@ -71,6 +71,7 @@ class EmailSender {
       helper.setText(body, isHtml);
 
       if (!isEmpty(emailAttachments)) {
+        XLOGGER.info("start to generate email attachments");
         emailAttachments.forEach(attachment -> {
           DataSource dataSource = emailAttachmentService.getAttatchmentDataSource(attachment);
           try {
