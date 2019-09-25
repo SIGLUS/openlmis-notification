@@ -16,6 +16,7 @@
 package org.openlmis.notification.service;
 
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.openlmis.notification.i18n.MessageKeys.ERROR_ADD_EMAIL_ATTACHMENT_FAILURE;
 import static org.openlmis.notification.i18n.MessageKeys.ERROR_SEND_MAIL_FAILURE;
 
 import java.util.List;
@@ -48,10 +49,6 @@ class EmailSender {
   @Value("${email.noreply}")
   private String from;
 
-  static {
-    System.setProperty("mail.mime.splitlongparameters", "false");
-  }
-
   void sendMail(String to, String subject, String body, Boolean isHtml,
             List<EmailAttachment> emailAttachments) {
     XLOGGER.entry(to, subject, body, isHtml);
@@ -77,7 +74,11 @@ class EmailSender {
           try {
             helper.addAttachment(attachment.getAttachmentFileName(), dataSource);
           } catch (MessagingException e) {
-            XLOGGER.error(e.getMessage());
+            ServerException exception = new ServerException(e, ERROR_ADD_EMAIL_ATTACHMENT_FAILURE);
+            XLOGGER.throwing(exception);
+            profiler.stop().log();
+
+            throw exception;
           }
         });
       }

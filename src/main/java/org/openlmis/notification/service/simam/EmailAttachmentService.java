@@ -60,10 +60,10 @@ public class EmailAttachmentService {
   }
 
   public DataSource getAttatchmentDataSource(EmailAttachment emailAttachment) {
-    String budgetName = emailAttachment.getS3Bucket();
+    String bucketName = emailAttachment.getS3Bucket();
     String keyName = emailAttachment.getS3Folder() + FOLDER_SUFFIX
         + emailAttachment.getAttachmentFileName();
-    S3Object s3Object = s3Client.getObject(budgetName, keyName);
+    S3Object s3Object = s3Client.getObject(bucketName, keyName);
     S3ObjectInputStream inputStream = s3Object.getObjectContent();
     DataSource attachmentDataSource = null;
     try {

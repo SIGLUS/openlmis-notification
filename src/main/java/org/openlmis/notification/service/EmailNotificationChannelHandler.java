@@ -55,7 +55,7 @@ public class EmailNotificationChannelHandler {
     UserContactDetails contactDetails = userContactDetailsRepository.findOne(recipient);
 
     String tag = payload.getTag();
-    Boolean isHtml = !StringUtils.isEmpty(tag) && tag.equals(SIMAM) ? true : false;
+    Boolean isHtml = !StringUtils.isEmpty(tag) && tag.equals(SIMAM);
     if (shouldSendMessage(contactDetails, important)) {
       emailSender.sendMail(contactDetails.getEmailAddress(),
           payload.getSubject(), payload.getBody(), isHtml, payload.getEmailAttachments());

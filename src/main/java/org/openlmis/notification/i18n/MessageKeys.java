@@ -114,6 +114,9 @@ public abstract class MessageKeys {
   public static final String ERROR_SEND_MAIL_FAILURE =
       join(ERROR_PREFIX, "sendMail", "failure");
 
+  public static final String ERROR_ADD_EMAIL_ATTACHMENT_FAILURE =
+      join(ERROR_PREFIX, "add email attachment", "failure");
+
   public static final String ERROR_SEND_SMS_FAILURE =
       join(ERROR_PREFIX, "sendSms", "failure");
 
