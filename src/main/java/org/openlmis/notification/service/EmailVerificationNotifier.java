@@ -109,7 +109,7 @@ public class EmailVerificationNotifier {
 
   private String getVerificationPath(UserContactDetails contactDetails,
       EmailVerificationToken token) {
-    return System.getenv("BASE_URL")
+    return System.getenv("VIRTUAL_HOST")
         + "/api/userContactDetails/"
         + contactDetails.getId()
         + "/verifications/"
