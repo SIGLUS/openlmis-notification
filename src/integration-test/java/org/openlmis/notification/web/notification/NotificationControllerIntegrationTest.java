@@ -46,6 +46,8 @@ import org.openlmis.notification.web.BaseWebIntegrationTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 
 @SuppressWarnings("PMD.TooManyMethods")
 public class NotificationControllerIntegrationTest extends BaseWebIntegrationTest {
@@ -140,6 +142,33 @@ public class NotificationControllerIntegrationTest extends BaseWebIntegrationTes
 
     assertEquals(1, notificationPage.getContent().size());
     assertThat(RAML_ASSERT_MESSAGE, restAssured.getLastReport(), RamlMatchers.hasNoViolations());
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shouldNotAllowPaginationWithZeroSize() {
+    Pageable page = new PageRequest(0, 0);
+    restAssured.given()
+            .header(HttpHeaders.AUTHORIZATION, USER_ACCESS_TOKEN_HEADER)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .queryParam("page", page.getPageNumber())
+            .queryParam("size", page.getPageSize())
+            .when()
+            .get(RESOURCE_URL)
+            .then()
+            .statusCode(400);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shouldNotAllowPaginationWithoutSize() {
+    Pageable page = new PageRequest(0, 0);
+    restAssured.given()
+            .header(HttpHeaders.AUTHORIZATION, USER_ACCESS_TOKEN_HEADER)
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .queryParam("page", page.getPageNumber())
+            .when()
+            .get(RESOURCE_URL)
+            .then()
+            .statusCode(400);
   }
 
   private Response send(String token) {

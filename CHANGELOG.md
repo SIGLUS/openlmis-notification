@@ -1,3 +1,23 @@
+4.2.0 / 2019-10-17
+=================
+
+New functionality:
+* [OLMIS-6558](https://openlmis.atlassian.net/browse/OLMIS-6558): Add new environment variable - PUBLIC_URL and use to for email generated links
+
+Improvements:
+* [OLMIS-4128](https://openlmis.atlassian.net/browse/OLMIS-4128): Change maximum page size to max integer.
+* [OLMIS-6129](https://openlmis.atlassian.net/browse/OLMIS-6129): Added package-lock.json file and removed package-lock.json entry from .gitignore.
+* [OLMIS-6408](https://openlmis.atlassian.net/browse/OLMIS-6408): Added pageable validator.
+
+Bug fixes, security and performance improvements (backwards-compatible):
+* [OLMIS-6078](https://openlmis.atlassian.net/browse/OLMIS-6078): Added user contact details for admin
+
+4.1.1 / 2019-08-23
+==================
+
+Bug fixes, security and performance improvements (backwards-compatible):
+* [OLMIS-6527](https://openlmis.atlassian.net/browse/OLMIS-6527): Fixed missing localization in email address verification notification.
+
 4.1.0 / 2019-05-27
 ==================
 

@@ -147,6 +147,12 @@ public abstract class MessageKeys {
   public static final String ERROR_DIGEST_SUBSCRIPTION_INVALID_CHANNEL_FOR_DIGEST =
       join(ERROR_PREFIX, DIGEST_SUBSCRIPTION, INVALID_CHANNEL_FOR_DIGEST);
 
+  public static final String ERROR_SIZE_NULL =
+      join(ERROR_PREFIX, "pageable.size.null");
+
+  public static final String ERROR_SIZE_NOT_POSITIVE =
+      join(ERROR_PREFIX, "pageable.size.notPositive");
+
   private MessageKeys() {
     throw new UnsupportedOperationException();
   }

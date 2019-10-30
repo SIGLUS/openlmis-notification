@@ -11,4 +11,3 @@ gradlew*
 .env
 .tx/
 node_modules/
-package-lock.json

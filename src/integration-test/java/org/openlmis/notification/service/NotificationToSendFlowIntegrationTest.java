@@ -87,6 +87,8 @@ public class NotificationToSendFlowIntegrationTest {
 
   private static final String CRON_EXPRESSION = "0/15 * * * * *"; // Every 15 seconds
 
+  private static final int INITIAL_USER_CONTACT_DETAILS_COUNT = 1;
+
   @MockBean
   private EmailSender emailSender;
 
@@ -229,7 +231,8 @@ public class NotificationToSendFlowIntegrationTest {
 
     assertThat(pendingNotificationRepository.exists(correctPendingNotification.getId())).isFalse();
 
-    assertThat(userContactDetailsRepository.count()).isEqualTo(userContactDetails.size());
+    assertThat(userContactDetailsRepository.count())
+            .isEqualTo(userContactDetails.size() + INITIAL_USER_CONTACT_DETAILS_COUNT);
     assertThat(notificationRepository.count()).isEqualTo(emailNotifications.size());
     assertThat(pendingNotificationRepository.count())
         .isEqualTo(pendingEmailNotifications.size() - 1L);
